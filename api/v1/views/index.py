@@ -19,9 +19,19 @@ def get_status():
 @app_views.route("/stats", strict_slashes=False)
 
 def stats():
-    clases = {"amenities": Amenity, "cities": City, "places": Place,
-              "reviews": Review, "states": State, "users": User}
-    my_dict = {}
-    for i, j in clases.items():
-        my_dict[i] = storage.count(j)
-    return jsonify(my_dict)
+    """
+    function to return the count of all class objects
+    """
+    if request.method == 'GET':
+        response = {}
+        PLURALS = {
+            "Amenity": "amenities",
+            "City": "cities",
+            "Place": "places",
+            "Review": "reviews",
+            "State": "states",
+            "User": "users"
+        }
+        for key, value in PLURALS.items():
+            response[value] = storage.count(key)
+        return jsonify(response)
